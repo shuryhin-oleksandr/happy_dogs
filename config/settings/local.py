@@ -11,7 +11,7 @@ SECRET_KEY = env(
     default="5mjkNQuQVHINizB4KpAHF4KsbGGSt4Y2y1b9cufV7eVVezZ5HKnUYYSTxDyj54wA",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "0.0.0.0", "127.0.0.1"])
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -34,7 +34,6 @@ EMAIL_BACKEND = env(
 # ------------------------------------------------------------------------------
 # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
 INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
-
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
