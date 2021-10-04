@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from django.views.generic import TemplateView, ListView
 
 from happy_dogs.dogs.forms import BoardingFilterForm
-from happy_dogs.dogs.models import Visit
+from happy_dogs.dogs.models import BoardingVisit
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class BoardingView(TemplateView):
             end_date = filter_form.cleaned_data.get('end_date')
 
             for calendar_date in daterange(start_date, end_date):
-                dogs_count = Visit.objects.filter(
+                dogs_count = BoardingVisit.objects.filter(
                     start_date__lte=calendar_date, end_date__gte=calendar_date
                 ).count()
                 boarding_record = {"date": calendar_date, "dogs_count": dogs_count}
@@ -44,7 +44,7 @@ class BoardingView(TemplateView):
 
 
 class BoardingDayView(ListView):
-    model = Visit
+    model = BoardingVisit
     template_name = "dogs/boarding-day.html"
 
     def get_calendar_date(self):
