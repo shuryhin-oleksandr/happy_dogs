@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Boarding calendar{% endblock %}
+
+{% block content %}
+  {% for visit in visits %}
+    <div>{{  visit.dog }} - {{ visit.start_date }} {{ visit.end_date }} </div>
+  {% endfor %}
+{% endblock %}
