@@ -7,10 +7,15 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, ListView, CreateView
+from rest_framework.exceptions import ValidationError
+from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from happy_dogs.dogs.factories import DogFactory, BoardingVisitFactory
 from happy_dogs.dogs.forms import BoardingFilterForm
 from happy_dogs.dogs.models import BoardingVisit, Dog
+from happy_dogs.dogs.serializers import BoardingVisitSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +28,7 @@ def daterange(start_date, end_date):
 
 class BoardingView(TemplateView):
     template_name = "dogs/boarding.html"
-    form_class = BoardingFilterForm
+    filter_form_class = BoardingFilterForm
 
     def get_context_data(self, **kwargs):
         today = date.today()
@@ -36,7 +41,7 @@ class BoardingView(TemplateView):
             'end_date': end_date,
         }
         logger.info(filter_data)
-        filter_form = self.form_class(filter_data)
+        filter_form = self.filter_form_class(filter_data)
 
         boarding_data = []
         if filter_form.is_valid():
@@ -101,7 +106,7 @@ class BoardingVisitCreateView(CreateView):
         return reverse('dogs:boarding')
 
 
-class CreateBoardingTestDataView(View):
+class CreateBoardingTestDataView(ListView):
     def get(self, request):
         Dog.objects.all().delete()
         BoardingVisit.objects.all().delete()
@@ -116,3 +121,54 @@ class CreateBoardingTestDataView(View):
                 BoardingVisitFactory(start_date=start_date, end_date=end_date, dog=dog)
 
         return redirect('dogs:boarding')
+
+
+class BoardingAPIView(APIView):
+    filter_form_class = BoardingFilterForm
+
+    def get(self, request):
+        today = date.today()
+        last_month_day = calendar.monthrange(today.year, today.month)[1]
+        start_date = self.request.GET.get('start_date') or today.replace(day=1)
+        end_date = self.request.GET.get('end_date') or today.replace(day=last_month_day)
+
+        filter_data = {
+            'start_date': start_date,
+            'end_date': end_date,
+        }
+        logger.info(filter_data)
+        filter_form = self.filter_form_class(filter_data)
+
+        boarding_data = []
+        if filter_form.is_valid():
+            start_date = filter_form.cleaned_data.get('start_date')
+            end_date = filter_form.cleaned_data.get('end_date')
+
+            for calendar_date in daterange(start_date, end_date):
+                dogs_count = BoardingVisit.objects.filter(
+                    start_date__lte=calendar_date, end_date__gte=calendar_date
+                ).count()
+                boarding_record = {"date": calendar_date, "dogs_count": dogs_count}
+                boarding_data.append(boarding_record)
+
+        return Response(boarding_data)
+
+
+class BoardingDayAPIView(ListAPIView):
+    serializer_class = BoardingVisitSerializer
+
+    def get_calendar_date(self):
+        year = self.kwargs.get("year")
+        month = self.kwargs.get("month")
+        day = self.kwargs.get("day")
+        return date(year, month, day)
+
+    def get_queryset(self):
+        try:
+            calendar_date = self.get_calendar_date()
+        except ValueError:
+            raise ValidationError("Invalid input date format")
+
+        visits = BoardingVisit.objects.filter(start_date__lte=calendar_date,
+                                              end_date__gte=calendar_date)
+        return visits
