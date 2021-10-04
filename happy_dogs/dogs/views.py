@@ -1,3 +1,4 @@
+import calendar
 import logging
 from datetime import date, timedelta
 
@@ -6,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, ListView, CreateView
 
+from happy_dogs.dogs.factories import DogFactory, BoardingVisitFactory
 from happy_dogs.dogs.forms import BoardingFilterForm
 from happy_dogs.dogs.models import BoardingVisit, Dog
 
@@ -23,14 +25,20 @@ class BoardingView(TemplateView):
     form_class = BoardingFilterForm
 
     def get_context_data(self, **kwargs):
-        if self.request.GET:
-            filter_form = self.form_class(self.request.GET)
-        else:
-            filter_form = self.form_class({})
-        form_is_valid = filter_form.is_valid()
+        today = date.today()
+        last_month_day = calendar.monthrange(today.year, today.month)[1]
+        start_date = self.request.GET.get('start_date') or today.replace(day=1)
+        end_date = self.request.GET.get('end_date') or today.replace(day=last_month_day)
+
+        filter_data = {
+            'start_date': start_date,
+            'end_date': end_date,
+        }
+        logger.info(filter_data)
+        filter_form = self.form_class(filter_data)
 
         boarding_data = []
-        if form_is_valid:
+        if filter_form.is_valid():
             start_date = filter_form.cleaned_data.get('start_date')
             end_date = filter_form.cleaned_data.get('end_date')
 
@@ -94,4 +102,10 @@ class BoardingVisitCreateView(CreateView):
 
 class CreateBoardingTestDataView(View):
     def get(self, request):
+        Dog.objects.all().delete()
+        BoardingVisit.objects.all().delete()
+
+        for month in range(1, 12):
+            DogFactory()
+
         return redirect('dogs:boarding')
