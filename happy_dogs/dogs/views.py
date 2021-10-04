@@ -1,6 +1,7 @@
 import calendar
 import logging
 from datetime import date, timedelta
+import random
 
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
@@ -105,7 +106,13 @@ class CreateBoardingTestDataView(View):
         Dog.objects.all().delete()
         BoardingVisit.objects.all().delete()
 
+        TEST_DATA_YEAR = 2021
+        dogs = [DogFactory() for i in range(10)]
         for month in range(1, 12):
-            DogFactory()
+            for dog in dogs:
+                start_date = date(year=TEST_DATA_YEAR, month=month, day=random.randrange(1, 23))
+                days_delta = random.randrange(1, 5)
+                end_date = start_date + timedelta(days=days_delta)
+                BoardingVisitFactory(start_date=start_date, end_date=end_date, dog=dog)
 
         return redirect('dogs:boarding')
