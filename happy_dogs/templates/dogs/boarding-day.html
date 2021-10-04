@@ -4,7 +4,10 @@
 {% block title %}Boarding calendar{% endblock %}
 
 {% block content %}
+  {{ error_message }}
   {% for visit in visit_list %}
-    <div>{{ visit.dog }}: {{ visit.start_date }} - {{ visit.end_date }}</div>
+    <div>
+      {{ visit.dog }}: {{ visit.start_date }} - {{ visit.end_date }}
+    </div>
   {% endfor %}
 {% endblock %}

@@ -39,13 +39,13 @@ class BoardingView(TemplateView):
                 boarding_data.append(boarding_record)
 
         kwargs['filter_form'] = filter_form
-        kwargs['calendar_data'] = boarding_data
+        kwargs['boarding_data'] = boarding_data
         return super().get_context_data(**kwargs)
 
 
 class BoardingDayView(ListView):
     model = Visit
-    template_name = "dogs/boarding_visits_list.html"
+    template_name = "dogs/boarding-day.html"
 
     def get_calendar_date(self):
         year = self.kwargs.get("year")
@@ -54,8 +54,10 @@ class BoardingDayView(ListView):
         return date(year, month, day)
 
     def get_context_data(self, **kwargs):
-        kwargs['error_message'] = None
-
+        try:
+            self.get_calendar_date()
+        except ValueError:
+            kwargs['error_message'] = 'Invalid date format'
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):

@@ -8,7 +8,12 @@
     {{ filter_form.as_p }}
     <input type="submit"/>
   </form>
-  {% for calendar_record in calendar_data %}
-    <div>{{ calendar_record.date }} - {{ calendar_record.dogs_count }}</div>
+  {% for boarding_record in boarding_data %}
+    <div>
+      <a
+        href="{% url 'dogs:boarding-day' year=boarding_record.date.year month=boarding_record.date.month day=boarding_record.date.day %}">
+        {{ boarding_record.date }} - {{ boarding_record.dogs_count }}
+      </a>
+    </div>
   {% endfor %}
 {% endblock %}
