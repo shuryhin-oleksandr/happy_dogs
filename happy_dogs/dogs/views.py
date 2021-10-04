@@ -1,10 +1,11 @@
 import logging
 from datetime import date, timedelta
 
-from django.views.generic import TemplateView, ListView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView, ListView, CreateView
 
 from happy_dogs.dogs.forms import BoardingFilterForm
-from happy_dogs.dogs.models import BoardingVisit
+from happy_dogs.dogs.models import BoardingVisit, Dog
 
 logger = logging.getLogger(__name__)
 
@@ -69,3 +70,21 @@ class BoardingDayView(ListView):
         visits = super().get_queryset()
         visits = visits.filter(start_date__lte=calendar_date, end_date__gte=calendar_date)
         return visits
+
+
+class DogCreateView(CreateView):
+    model = Dog
+    fields = ['first_name', 'last_name']
+    template_name = 'dogs/create.html'
+
+    def get_success_url(self):
+        return reverse('dogs:boarding')
+
+
+class BoardingVisitCreateView(CreateView):
+    model = BoardingVisit
+    fields = ['dog', 'start_date', 'end_date']
+    template_name = 'dogs/create.html'
+
+    def get_success_url(self):
+        return reverse('dogs:boarding')

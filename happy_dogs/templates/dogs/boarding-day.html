@@ -5,7 +5,7 @@
 
 {% block content %}
   {{ error_message }}
-  {% for visit in visit_list %}
+  {% for visit in boardingvisit_list %}
     <div>
       {{ visit.dog }}: {{ visit.start_date }} - {{ visit.end_date }}
     </div>

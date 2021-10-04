@@ -1,6 +1,7 @@
 from django.urls import path
 
-from happy_dogs.dogs.views import BoardingView, BoardingDayView
+from happy_dogs.dogs.views import BoardingView, BoardingDayView, DogCreateView, \
+    BoardingVisitCreateView
 
 app_name = "dogs"
 urlpatterns = [
@@ -11,4 +12,6 @@ urlpatterns = [
         BoardingDayView.as_view(),
         name="boarding-day",
     ),
+    path("add-dog", DogCreateView.as_view(), name="add-dog"),
+    path("add-visit", BoardingVisitCreateView.as_view(), name="add-visit"),
 ]

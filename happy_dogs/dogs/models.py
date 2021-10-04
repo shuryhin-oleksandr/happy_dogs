@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -15,7 +16,7 @@ class Dog(models.Model):
             return f"{self.first_name} {self.last_name}"
 
     class Meta:
-        unique_together = ['first_name', 'last_name']
+        unique_together = ["first_name", "last_name"]
 
     def __str__(self):
         return self.full_name
@@ -26,6 +27,14 @@ class BoardingVisit(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    def clean(self):
+        model = type(self)
+        overlapping_visit = model.objects.filter(
+            dog=self.dog, end_date__gt=self.start_date, start_date__lt=self.end_date
+        ).first()
+        if overlapping_visit:
+            raise ValidationError(f"Overlapping boarding visit exists: {str(overlapping_visit)}")
+
     # TODO: Improve string
     def __str__(self):
-        return f"{self.dog.full_name} Visit"
+        return f"{self.dog.full_name} Visit ({self.start_date} - {self.end_date})"
