@@ -14,8 +14,8 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
 
 
-class CalendarView(TemplateView):
-    template_name = "dogs/calendar.html"
+class BoardingCalendarView(TemplateView):
+    template_name = "dogs/boarding_calendar.html"
 
     def get_context_data(self, **kwargs):
         start_date = date(2021, 10, 1)
@@ -34,9 +34,9 @@ class CalendarView(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-class DateVisitsListView(ListView):
+class BoardingVisitsListView(ListView):
     model = Visit
-    template_name = "dogs/date_visits_list.html"
+    template_name = "dogs/boarding_visits_list.html"
 
     # TODO: use filters
     def get_queryset(self):

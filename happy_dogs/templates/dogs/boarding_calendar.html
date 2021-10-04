@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Date visits list{% endblock %}
+
+{% block content %}
+  <label for="start">Start date:</label>
+  <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31">
+
+  {% for calendar_record in calendar_data %}
+    <div>{{ calendar_record.date }} - {{ calendar_record.dogs_count }}</div>
+  {% endfor %}
+{% endblock %}
