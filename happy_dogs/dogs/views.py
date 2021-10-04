@@ -37,3 +37,15 @@ class CalendarView(TemplateView):
 class DateVisitsListView(ListView):
     model = Visit
     template_name = "dogs/date_visits_list.html"
+
+    # TODO: use filters
+    def get_queryset(self):
+        # TODO: Add validation
+        year = self.kwargs.get("year")
+        month = self.kwargs.get("month")
+        day = self.kwargs.get("day")
+        calendar_date = date(year, month, day)
+
+        visits = super().get_queryset()
+        visits = visits.filter(start_date__lte=calendar_date, end_date__gte=calendar_date)
+        return visits

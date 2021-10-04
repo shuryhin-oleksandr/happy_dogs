@@ -4,7 +4,7 @@
 {% block title %}Boarding calendar{% endblock %}
 
 {% block content %}
-  {% for visit in visits %}
+  {% for visit in visit_list %}
     <div>{{  visit.dog }} - {{ visit.start_date }} {{ visit.end_date }} </div>
   {% endfor %}
 {% endblock %}
