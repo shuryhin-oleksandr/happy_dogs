@@ -1,14 +1,14 @@
 from django.urls import path
 
-from happy_dogs.dogs.views import BoardingCalendarView, BoardingVisitsListView
+from happy_dogs.dogs.views import BoardingView, BoardingDayView
 
 app_name = "dogs"
 urlpatterns = [
-    path("boarding-calendar/", BoardingCalendarView.as_view(), name="boarding-calendar"),
+    path("boarding/", BoardingView.as_view(), name="boarding"),
     # TODO: Fix parsing
     path(
-        "calendar/<int:year>/<int:month>/<int:day>/",
-        BoardingVisitsListView.as_view(),
-        name="boarding-visits",
+        "boarding/<int:year>/<int:month>/<int:day>/",
+        BoardingDayView.as_view(),
+        name="boarding-day",
     ),
 ]
