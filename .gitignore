@@ -279,3 +279,5 @@ happy_dogs/media/
 .env
 .envs/*
 !.envs/.local/
+
+.idea/

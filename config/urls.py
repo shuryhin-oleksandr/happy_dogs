@@ -15,7 +15,7 @@ urlpatterns = [
     # User management
     path("users/", include("happy_dogs.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
+    path("dogs/", include("happy_dogs.dogs.urls", namespace="dogs"))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

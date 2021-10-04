@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "happy_dogs.users.apps.UsersConfig",
+    "happy_dogs.dogs.apps.DogsConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
