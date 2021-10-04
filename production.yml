@@ -30,6 +30,3 @@ services:
       - production_postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.production/.postgres
-
-  redis:
-    image: redis:6
