@@ -1,7 +1,9 @@
 import logging
 from datetime import date, timedelta
 
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, ListView, CreateView
 
 from happy_dogs.dogs.forms import BoardingFilterForm
@@ -88,3 +90,8 @@ class BoardingVisitCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('dogs:boarding')
+
+
+class CreateBoardingTestDataView(View):
+    def get(self, request):
+        return redirect('dogs:boarding')

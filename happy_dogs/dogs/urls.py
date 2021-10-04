@@ -1,7 +1,7 @@
 from django.urls import path
 
 from happy_dogs.dogs.views import BoardingView, BoardingDayView, DogCreateView, \
-    BoardingVisitCreateView
+    BoardingVisitCreateView, CreateBoardingTestDataView
 
 app_name = "dogs"
 urlpatterns = [
@@ -14,4 +14,6 @@ urlpatterns = [
     ),
     path("add-dog", DogCreateView.as_view(), name="add-dog"),
     path("add-visit", BoardingVisitCreateView.as_view(), name="add-visit"),
+    path("create-boarding-test-data", CreateBoardingTestDataView.as_view(),
+         name="create-boarding-test-data"),
 ]
