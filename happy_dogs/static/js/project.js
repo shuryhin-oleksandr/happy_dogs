@@ -127,7 +127,7 @@ const App = () => {
         setBoardingStartDate={setBoardingStartDate}
         setBoardingEndDate={setBoardingEndDate}/>
       <div className="row">
-        <div className="col-2">
+        <div className="col-3">
           <Boarding
             setBoardingDayUrl={setBoardingDayUrl}
             boardingStartDate={boardingStartDate}

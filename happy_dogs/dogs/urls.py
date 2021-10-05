@@ -12,9 +12,9 @@ urlpatterns = [
         BoardingDayView.as_view(),
         name="boarding-day",
     ),
-    path("add-dog", DogCreateView.as_view(), name="add-dog"),
-    path("add-visit", BoardingVisitCreateView.as_view(), name="add-visit"),
-    path("create-boarding-test-data", CreateBoardingTestDataView.as_view(),
+    path("add-dog/", DogCreateView.as_view(), name="add-dog"),
+    path("add-visit/", BoardingVisitCreateView.as_view(), name="add-visit"),
+    path("create-boarding-test-data/", CreateBoardingTestDataView.as_view(),
          name="create-boarding-test-data"),
 
     path("boarding-api/", BoardingAPIView.as_view(), name="boarding-api"),

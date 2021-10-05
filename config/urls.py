@@ -7,10 +7,6 @@ from django.views.generic import TemplateView, RedirectView
 
 urlpatterns = [
                   path("", RedirectView.as_view(pattern_name='dogs:boarding'), name="home"),
-                  path(
-                      "about/", TemplateView.as_view(template_name="pages/about.html"),
-                      name="about"
-                  ),
                   # Django Admin, use {% url 'admin:index' %}
                   path(settings.ADMIN_URL, admin.site.urls),
                   # User management

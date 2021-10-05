@@ -91,19 +91,19 @@ class BoardingDayView(ListView):
 class DogCreateView(CreateView):
     model = Dog
     fields = ['first_name', 'last_name']
-    template_name = 'dogs/create.html'
+    template_name = 'dogs/create_dog.html'
 
     def get_success_url(self):
-        return reverse('dogs:boarding')
+        return reverse_lazy('dogs:boarding')
 
 
 class BoardingVisitCreateView(CreateView):
     model = BoardingVisit
     fields = ['dog', 'start_date', 'end_date']
-    template_name = 'dogs/create.html'
+    template_name = 'dogs/create_visit.html'
 
     def get_success_url(self):
-        return reverse('dogs:boarding')
+        return reverse_lazy('dogs:boarding')
 
 
 class CreateBoardingTestDataView(ListView):
