@@ -27,22 +27,28 @@ const useFetchAPI = (url) => {
 const BoardingFilterForm = ({boardingStartDate, boardingEndDate, setBoardingStartDate, setBoardingEndDate}) => {
   return (
     <div>
-      <p>
-        <label htmlFor="id_start_date">Start date:</label>
-        <input
-          type="text"
-          value={boardingStartDate}
-          onChange={(e) => setBoardingStartDate(e.target.value)}
-        />
-      </p>
-      <p>
-        <label htmlFor="id_end_date">End date:</label>
-        <input
-          type="text"
-          value={boardingEndDate}
-          onChange={(e) => setBoardingEndDate(e.target.value)}
-        />
-      </p>
+      <div className="form-row mb-4">
+        <div className="col-auto">
+          <label className="sr-only" htmlFor="inlineFormInput">Name</label>
+          <div className="input-group mb-2">
+            <div className="input-group-prepend">
+              <div className="input-group-text">Start date</div>
+            </div>
+            <input type="text" className="form-control" value={boardingStartDate}
+                   onChange={(e) => setBoardingStartDate(e.target.value)}/>
+          </div>
+        </div>
+        <div className="col-auto">
+          <label className="sr-only" htmlFor="inlineFormInputGroup">Username</label>
+          <div className="input-group mb-2">
+            <div className="input-group-prepend">
+              <div className="input-group-text">End date</div>
+            </div>
+            <input type="text" className="form-control" value={boardingEndDate}
+                   onChange={(e) => setBoardingEndDate(e.target.value)}/>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -61,11 +67,19 @@ const Boarding = ({setBoardingDayUrl, boardingStartDate, boardingEndDate}) => {
   } else if (!isLoaded) {
     return <div>Loading...</div>;
   } else {
-    return (boarding_records.map((boarding_record, index) => (
-      <div key={index} onClick={(e) => setBoardingDayUrl(boarding_record.url)}>
-        {boarding_record.date} - {boarding_record.dogs_count}
+    return (
+      <div>
+        <h3>Boarding</h3>
+        <div className="list-group">
+          {boarding_records.map((boarding_record, index) => (
+            <a href="#" className="list-group-item list-group-item-action py-1" key={index}
+               onClick={(e) => setBoardingDayUrl(boarding_record.url)}>
+              {boarding_record.date} - {boarding_record.dogs_count}
+            </a>
+          ))}
+        </div>
       </div>
-    )))
+    )
   }
 }
 
@@ -77,11 +91,18 @@ const BoardingDay = ({boardingDayUrl}) => {
   } else if (!isLoaded) {
     return <div>Loading...</div>;
   } else {
-    return (items.map((item, index) => (
-      <div key={index}>
-        {item.dog}: {item.start_date} - {item.end_date}
+    return (
+      <div>
+        <h3>Boarding visits</h3>
+        <ul className="list-group">
+          {items.map((item, index) => (
+            <li className="list-group-item py-1" key={index}>
+              {item.dog}: {item.start_date} - {item.end_date}
+            </li>
+          ))}
+        </ul>
       </div>
-    )))
+    )
   }
 }
 
@@ -99,17 +120,23 @@ const App = () => {
   const [boardingEndDate, setBoardingEndDate] = React.useState(lastMonthDayStr)
 
   return (
-    <div>
+    <div className="container py-5">
       <BoardingFilterForm
         boardingStartDate={boardingStartDate}
         boardingEndDate={boardingEndDate}
         setBoardingStartDate={setBoardingStartDate}
         setBoardingEndDate={setBoardingEndDate}/>
-      <Boarding
-        setBoardingDayUrl={setBoardingDayUrl}
-        boardingStartDate={boardingStartDate}
-        boardingEndDate={boardingEndDate}/>
-      <BoardingDay boardingDayUrl={boardingDayUrl}/>
+      <div className="row">
+        <div className="col-2">
+          <Boarding
+            setBoardingDayUrl={setBoardingDayUrl}
+            boardingStartDate={boardingStartDate}
+            boardingEndDate={boardingEndDate}/>
+        </div>
+        <div className="col-6">
+          <BoardingDay boardingDayUrl={boardingDayUrl}/>
+        </div>
+      </div>
     </div>
   )
 }
