@@ -53,6 +53,19 @@ const BoardingFilterForm = ({boardingStartDate, boardingEndDate, setBoardingStar
   )
 }
 
+const DataNotFound = () => {
+  return (
+    <div>
+      <h3>Boarding</h3>
+      <ul className="list-group">
+        <li className="list-group-item py-1" key='0'>
+          Data not found
+        </li>
+      </ul>
+    </div>
+  )
+}
+
 const Boarding = ({setBoardingDayUrl, boardingStartDate, boardingEndDate}) => {
   const [error, isLoaded, items] =
     useFetchAPI(`/dogs/boarding-api/?start_date=${boardingStartDate}&end_date=${boardingEndDate}`)
@@ -66,6 +79,8 @@ const Boarding = ({setBoardingDayUrl, boardingStartDate, boardingEndDate}) => {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
     return <div>Loading...</div>;
+  } else if (!boarding_records.length) {
+    return <DataNotFound/>
   } else {
     return (
       <div>
@@ -90,6 +105,8 @@ const BoardingDay = ({boardingDayUrl}) => {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
     return <div>Loading...</div>;
+  } else if (!items.length) {
+    return <DataNotFound/>
   } else {
     return (
       <div>
