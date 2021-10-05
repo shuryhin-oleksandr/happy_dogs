@@ -24,8 +24,32 @@ const useFetchAPI = (url) => {
   return [error, isLoaded, items];
 }
 
-const Boarding = ({setBoardingDayUrl}) => {
-  const [error, isLoaded, items] = useFetchAPI('/dogs/boarding-api/')
+const BoardingFilterForm = ({boardingStartDate, boardingEndDate, setBoardingStartDate, setBoardingEndDate}) => {
+  return (
+    <div>
+      <p>
+        <label htmlFor="id_start_date">Start date:</label>
+        <input
+          type="text"
+          value={boardingStartDate}
+          onChange={(e) => setBoardingStartDate(e.target.value)}
+        />
+      </p>
+      <p>
+        <label htmlFor="id_end_date">End date:</label>
+        <input
+          type="text"
+          value={boardingEndDate}
+          onChange={(e) => setBoardingEndDate(e.target.value)}
+        />
+      </p>
+    </div>
+  )
+}
+
+const Boarding = ({setBoardingDayUrl, boardingStartDate, boardingEndDate}) => {
+  const [error, isLoaded, items] =
+    useFetchAPI(`/dogs/boarding-api/?start_date=${boardingStartDate}&end_date=${boardingEndDate}`)
 
   let boarding_records = [...items];
   boarding_records.forEach((boarding_record) => {
@@ -62,10 +86,29 @@ const BoardingDay = ({boardingDayUrl}) => {
 }
 
 const App = () => {
-  const [boardingDayUrl, setBoardingDayUrl] = React.useState('/dogs/boarding-api/2021/10/5/')
+  let date = new Date(), year = date.getFullYear(), month = date.getMonth();
+  let firstMonthDay = new Date(year, month, 2);
+  let lastMonthDay = new Date(year, month + 1, 1);
+  let firstMonthDayStr = firstMonthDay.toISOString().split('T')[0]
+  let lastMonthDayStr = lastMonthDay.toISOString().split('T')[0]
+
+  const [boardingDayUrl, setBoardingDayUrl] = React.useState(
+    `/dogs/boarding-api/${firstMonthDayStr.replaceAll('-', '/')}/`
+  )
+  const [boardingStartDate, setBoardingStartDate] = React.useState(firstMonthDayStr)
+  const [boardingEndDate, setBoardingEndDate] = React.useState(lastMonthDayStr)
+
   return (
     <div>
-      <Boarding setBoardingDayUrl={setBoardingDayUrl}/>
+      <BoardingFilterForm
+        boardingStartDate={boardingStartDate}
+        boardingEndDate={boardingEndDate}
+        setBoardingStartDate={setBoardingStartDate}
+        setBoardingEndDate={setBoardingEndDate}/>
+      <Boarding
+        setBoardingDayUrl={setBoardingDayUrl}
+        boardingStartDate={boardingStartDate}
+        boardingEndDate={boardingEndDate}/>
       <BoardingDay boardingDayUrl={boardingDayUrl}/>
     </div>
   )
