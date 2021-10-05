@@ -5,13 +5,6 @@ from happy_dogs.dogs.views import BoardingView, BoardingDayView, DogCreateView, 
 
 app_name = "dogs"
 urlpatterns = [
-    path("boarding/", BoardingView.as_view(), name="boarding"),
-    # TODO: Fix parsing
-    path(
-        "boarding/<int:year>/<int:month>/<int:day>/",
-        BoardingDayView.as_view(),
-        name="boarding-day",
-    ),
     path("add-dog/", DogCreateView.as_view(), name="add-dog"),
     path("add-visit/", BoardingVisitCreateView.as_view(), name="add-visit"),
     path("create-boarding-test-data/", CreateBoardingTestDataView.as_view(),
@@ -23,5 +16,11 @@ urlpatterns = [
         BoardingDayAPIView.as_view(),
         name="boarding-day-api",
     ),
-
+    # Left just to demonstrate how it was implemented with Django
+    path("boarding/", BoardingView.as_view(), name="boarding"),
+    path(
+        "boarding/<int:year>/<int:month>/<int:day>/",
+        BoardingDayView.as_view(),
+        name="boarding-day",
+    ),
 ]
